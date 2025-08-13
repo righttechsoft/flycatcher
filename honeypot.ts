@@ -1,7 +1,6 @@
 // Honeypot application - monitors common ports and sends webhook alerts
 const WEBHOOK_URL = Deno.env.get("WEBHOOK_URL");
-const HONEYPOT_HOST = Deno.env.get("HONEYPOT_HOST") || "0.0.0.0";
-const HOST_NAME = Deno.env.get("host_name") || Deno.hostname();
+const HOST_NAME = Deno.env.get("HOST_NAME") || Deno.hostname();
 
 if (!WEBHOOK_URL) {
   console.error("WEBHOOK_URL environment variable is required");
@@ -89,7 +88,7 @@ function handleConnection(conn: Deno.Conn, port: number) {
 // Start listening on a specific port
 function startListener(port: number) {
   try {
-    const listener = Deno.listen({ hostname: HONEYPOT_HOST, port });
+    const listener = Deno.listen({ hostname: "0.0.0.0", port });
 
     console.log(`Listening on port ${port}`);
 
@@ -124,7 +123,6 @@ function startHealthCheck() {
 function main() {
   console.log("Starting honeypot on ports:", COMMON_PORTS.join(", "));
   console.log("Webhook URL:", WEBHOOK_URL);
-  console.log("Host:", HONEYPOT_HOST);
   console.log("Host Name:", HOST_NAME);
 
   const listeners: (Deno.Listener | null)[] = [];
